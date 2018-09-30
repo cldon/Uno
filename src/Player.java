@@ -33,28 +33,32 @@ public class Player {
 		numCards++;
 	}
 	
-	public boolean playCard(String color, int number) {
+	public Card playCard(String color, int number) {
+		
+		Card ret;
 		
 		if (color.equals("wild") && cards.get("wild").size() != 0 || color.equals("wild4") && cards.get("wild4").size() != 0) {
 			numCards --;
 			System.out.println("Card played! What color would you like to change the top card color to?");
-			cards.get(color).remove(0);
-			return true;	
+			
+			return cards.get(color).remove(0);
 		}
 		else if (color.equals("wild") || color.equals("wild4")) {
 			System.out.println("You don't have that card! Try again.");
-			return false;	
+			return null;	
 		}
 		
-		for (Card c : cards.get(color)) {
+		for (int i = 0; i < cards.get(color).size(); i ++) {
+			Card c = cards.get(color).get(i);
 			if (c.number == number) {
 				numCards --;
 				System.out.println("Card played! Next player's turn.");
-				return cards.get(color).remove(c);	
+				return cards.get(color).remove(i);	
 			}
 		}
+
 		System.out.println("You don't have that card! Try again.");
-		return false;	
+		return null;
 	}
 	
 	public void printCards() {

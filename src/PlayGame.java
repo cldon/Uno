@@ -123,10 +123,11 @@ public class PlayGame {
 		System.out.println(topCard);
 	}
 	
-	private void playTurn(Player p){
+	private Card playTurn(Player p){
 		String color = "";
 		int number = -1;
 		boolean success = false;
+		Card ret = null;
 		
 		while (!success) {
 			System.out.println("What card would you like to play?");
@@ -155,8 +156,13 @@ public class PlayGame {
 					}
 				}			
 			}
-			success = p.playCard(color, number);
+			
+			// as long as playCard hasn't returned a card, keep cycling
+			// TODO: add error handling for entering a card that can't go on top
+			ret = p.playCard(color, number);
+			success = (ret != null);
 		}	
+		return ret;
 	}
 	
 	private void run() {
@@ -167,23 +173,18 @@ public class PlayGame {
 		
 		int count = 0;
 		while (count < 3) {			
-//			System.out.println("Here is the top card in the discard pile:\n*top card*");
-//			System.out.println("What would you like to play?");
-//			scan.next();
 			
 			currPlayer.printCards();
 			
 			displayTopCard();
 			
-			playTurn(currPlayer);
+			topCard = playTurn(currPlayer);
 			
+			handlePlay();
 			
 			currPlayer = currPlayer.next;
 			count ++;
 				
-		}
-		
+		}	
 	}
-	
-
 }
