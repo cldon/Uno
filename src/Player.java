@@ -12,24 +12,37 @@ public class Player {
 	
 	int numCards;
 	
-	String[] cardOrder = {"Red", "Blue", "Yellow", "Green"};
+	static String[] cardOrder = {"Red", "Blue", "Yellow", "Green"};
 	
 	public Player(String name) {
 		this.name = name;
 		
 		cards = new HashMap<String, ArrayList<Card>>();
-		cards.put("Red", new ArrayList<Card>());
-		cards.put("Blue", new ArrayList<Card>());
-		cards.put("Yellow", new ArrayList<Card>());
-		cards.put("Green", new ArrayList<Card>());
-		cards.put("Wild", new ArrayList<Card>());
-		cards.put("Wild+4", new ArrayList<Card>());
+		cards.put("red", new ArrayList<Card>());
+		cards.put("blue", new ArrayList<Card>());
+		cards.put("yellow", new ArrayList<Card>());
+		cards.put("green", new ArrayList<Card>());
+		cards.put("wild", new ArrayList<Card>());
+		cards.put("wild4", new ArrayList<Card>());
 		
 		numCards = 0;
 	}
 	
 	public void dealCard(Card c) {
 		cards.get(c.color).add(c);
+		numCards++;
+	}
+	
+	public boolean playCard(String color, int number) {
+		
+		for (Card c : cards.get(color)) {
+			if (c.number == number) {
+				numCards --;
+				return cards.get(color).remove(c);
+			}
+		}
+		System.out.println("You don't have that card! Try again.");
+		return false;	
 	}
 	
 	public void printCards() {
@@ -37,7 +50,7 @@ public class Player {
 		for (String color: cardOrder) {
 			String output = color + ": ";
 			
-			for (Card c : cards.get(color)) {
+			for (Card c : cards.get(color.toLowerCase())) {
 				output += c.number + " ";
 			}
 			

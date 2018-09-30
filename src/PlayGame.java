@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.InputMismatchException;
 import java.util.LinkedList;
@@ -11,6 +12,7 @@ public class PlayGame {
 	GameLoop gp;
 	LinkedList<Card> deck;
 	Card topCard;
+	ArrayList<Card> discardDeck;
 	
 	public PlayGame() {
 		
@@ -18,13 +20,15 @@ public class PlayGame {
 		
 		gp = makePlayerLoop();
 		
+		discardDeck = new ArrayList<Card>();
+		
 		deck = makeDeck();
 		
-		dealCards();
-		
-		topCard = deck.removeFirst();
-		
-		run();
+//		dealCards();
+//		
+//		topCard = deck.removeFirst();
+//		
+//		run();
 	}
 
 	private int getNumPlayers() {
@@ -63,11 +67,11 @@ public class PlayGame {
 	private LinkedList<Card> makeDeck() {
 		
 		LinkedList<Card> ret = new LinkedList<Card>();
-		String[] colors = {"Red", "Blue", "Green", "Yellow"};
 		
-		for (String color:colors) {
+		
+		for (String color:Player.cardOrder) {
 			for (int i = 0; i < 13; i ++) {
-				ret.add(new Card(color, i));
+				ret.add(new Card(color.toLowerCase(), i));
 				
 				/** Uno deck includes 2 of every number except 0 per color
 				 * 10 == Skip Card
@@ -75,13 +79,19 @@ public class PlayGame {
 				 * 12 = Reverse Card
 				 */
 				if (i != 0) {
-					ret.add(new Card(color, i));
+					ret.add(new Card(color.toLowerCase(), i));
 				}
 			}	
 		}
 		for (int i = 0; i < 4; i ++) {
-			ret.addFirst(new Card("Wild", 13));
-			ret.addFirst(new Card("Wild+4", 14));
+			ret.add(new Card("wild", 13));
+			ret.add(new Card("wild4", 14));
+		}
+		
+		Card currCard = ret.removeFirst();
+		while (!ret.isEmpty()) {
+			System.out.println(currCard);
+			currCard = ret.removeFirst();
 		}
 
 		Collections.shuffle(ret);
@@ -99,7 +109,49 @@ public class PlayGame {
 			currPlayer = currPlayer.next;
 		}
 		
-//		System.out.println(deck.size() + " Cards Remain");
+	}
+	
+	private void displayTopCard() {
+		System.out.println("Here is the card on top:");
+		System.out.println(topCard);
+	}
+	
+	private void playTurn(Player p){
+		String color = "";
+		int number = -1;
+		boolean success = false;
+		
+		while (!success) {
+			System.out.println("What card would you like to play?");
+			System.out.print("Color (blue, red, green, yellow, wild, wild4:\n>> ");
+			color = scan.next().toLowerCase();
+			
+			
+			while (Card.ALL_COLORS.contains(color)) {
+				System.out.print("Invalid color, try again!\n>> ");
+				color = scan.next().toLowerCase();
+			}
+			if (!color.equals("wild") || !color.equals("wild4")) {
+				System.out.print("Number (0-9, 10 = Skip, 11 = +2, 12 = Reverse):\n>> ");
+				
+				while (number < 0 || number > 12) {
+					try {
+						number = scan.nextInt();
+						if (number < 0 || number > 12) {
+							number = -1;
+							System.out.print("Invalid number, try again!\n>> ");
+						}
+					}
+					catch (InputMismatchException e){
+						scan.next();
+						System.out.print("Invalid number, try again!\n>> ");
+					}
+				}			
+			}
+			
+		}
+		success = p.playCard(color, number);
+		
 	}
 	
 	private void run() {
@@ -109,16 +161,22 @@ public class PlayGame {
 		Player currPlayer = gp.getFirst();
 		
 		int count = 0;
-		while (!winner) {			
+		while (count < 3) {			
 //			System.out.println(curr.name + ", here are your cards:\n*all of the cards*");
 //			System.out.println("Here is the top card in the discard pile:\n*top card*");
 //			System.out.println("What would you like to play?");
 //			scan.next();
 			
 			currPlayer.printCards();
+			
+			displayTopCard();
+			
+			playTurn(currPlayer);
+			
+			
 			currPlayer = currPlayer.next;
-				
 			count ++;
+				
 		}
 		
 	}
