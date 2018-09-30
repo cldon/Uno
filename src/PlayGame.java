@@ -11,7 +11,10 @@ public class PlayGame {
 	int numPlayers;
 	GameLoop gp;
 	LinkedList<Card> deck;
+	
 	Card topCard;
+	String topColor;
+	
 	ArrayList<Card> discardDeck;
 	
 	public PlayGame() {
@@ -24,11 +27,11 @@ public class PlayGame {
 		
 		deck = makeDeck();
 		
-//		dealCards();
-//		
-//		topCard = deck.removeFirst();
-//		
-//		run();
+		dealCards();
+		
+		topCard = deck.removeFirst();
+		
+		run();
 	}
 
 	private int getNumPlayers() {
@@ -88,11 +91,11 @@ public class PlayGame {
 			ret.add(new Card("wild4", 14));
 		}
 		
-		Card currCard = ret.removeFirst();
-		while (!ret.isEmpty()) {
-			System.out.println(currCard);
-			currCard = ret.removeFirst();
-		}
+//		Card currCard = ret.removeFirst();
+//		while (!ret.isEmpty()) {
+//			System.out.println(currCard);
+//			currCard = ret.removeFirst();
+//		}
 
 		Collections.shuffle(ret);
 		
@@ -112,7 +115,11 @@ public class PlayGame {
 	}
 	
 	private void displayTopCard() {
-		System.out.println("Here is the card on top:");
+		System.out.print("Card on top: ");
+		if (topCard.color == "wild" || topCard.color =="wild4") {
+			System.out.println("Wild Card, color chosen as " + topColor);
+		}
+			
 		System.out.println(topCard);
 	}
 	
@@ -127,7 +134,7 @@ public class PlayGame {
 			color = scan.next().toLowerCase();
 			
 			
-			while (Card.ALL_COLORS.contains(color)) {
+			while (!Card.ALL_COLORS.contains(color)) {
 				System.out.print("Invalid color, try again!\n>> ");
 				color = scan.next().toLowerCase();
 			}
@@ -148,10 +155,8 @@ public class PlayGame {
 					}
 				}			
 			}
-			
-		}
-		success = p.playCard(color, number);
-		
+			success = p.playCard(color, number);
+		}	
 	}
 	
 	private void run() {
@@ -162,7 +167,6 @@ public class PlayGame {
 		
 		int count = 0;
 		while (count < 3) {			
-//			System.out.println(curr.name + ", here are your cards:\n*all of the cards*");
 //			System.out.println("Here is the top card in the discard pile:\n*top card*");
 //			System.out.println("What would you like to play?");
 //			scan.next();

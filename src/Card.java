@@ -15,7 +15,7 @@ public class Card {
 	
 	@Override
 	public String toString() {
-		return "CARD: " + color + number;
+		return "" + color + number;
 		
 	}
 }
