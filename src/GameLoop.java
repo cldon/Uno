@@ -37,13 +37,12 @@ public class GameLoop {
 		}
 	}
 	
-	public Player next() {
-		curr = curr.next;
-		return curr;
+	public void reverse() {
+		Player prev = null;
+		Player curr = head;
+		Player next = null; 
+		
 	}
 	
-	public Player previous() {
-		curr = curr.prev;
-		return curr;
-	}
+	
 }

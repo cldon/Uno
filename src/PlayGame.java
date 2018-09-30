@@ -16,6 +16,7 @@ public class PlayGame {
 	String topColor;
 	
 	ArrayList<Card> discardDeck;
+	Player currPlayer;
 	
 	public PlayGame() {
 		
@@ -165,9 +166,52 @@ public class PlayGame {
 		return ret;
 	}
 	
+	public void tryToDraw(Player p, int numCards) {
+		for (int i = 0; i < numCards; i++) {
+			try {
+				p.dealCard(deck.removeFirst());
+			} catch (Exception e) {
+				System.out.println("There are no more cards in the deck, keep playing with what you have!");
+				return;
+			}
+		}	
+	}
+	
+	private void handlePlay() {
+		topColor = topCard.color;
+		if (topCard.number <= 9) {
+			return;
+		}
+		//TODO: have to check that won't run out of cards
+		// Skip card: add an extra skip to currPlayer
+		else if (topCard.number == 10) {
+			currPlayer = currPlayer.next;
+		} // +2 card: person coming next gains two cards
+		else if (topCard.number == 11) {			
+			tryToDraw(currPlayer.next, 2);
+		} else if(topCard.number == 12 || topCard.number == 13) {
+			
+			System.out.print("You chose wild card! What would you like the color to be?\n>> ");
+			String color = scan.next().toLowerCase();
+			
+			while (!Card.ALL_COLORS.contains(color) && !color.equals("wild") && !color.equals("wild4")) {
+				System.out.println("Invalid color, try again!\n>> ");
+				color = scan.next();
+			}
+			
+			topColor = color;
+			
+			if (topCard.number == 13) {
+				tryToDraw(currPlayer.next, 4);
+			}
+		}
+		
+	}
 	private void run() {
 		boolean winner = false;
 		boolean reverse = false;
+		
+		currPlayer = gp.getFirst();
 		
 		Player currPlayer = gp.getFirst();
 		
