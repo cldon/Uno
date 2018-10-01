@@ -1,3 +1,8 @@
+/** 
+ * Player Class
+ * Each player has a name and their hand of cards, and the player "next to them"
+ */
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -29,26 +34,35 @@ public class Player {
 		next = null;
 	}
 	
+	// adds a card to player's hand
 	public void dealCard(Card c) {
 		cards.get(c.color).add(c);
 		numCards++;
 	}
 	
+	//helper function for checking wild cards, same checks done for wild and wild4
+	private Card checkWild(String wild, String color) {
+		if (cards.get("wild").size() == 0) {
+			System.out.println("You don't have that card! Try again.");
+			return null;
+		}		
+		numCards --;
+		System.out.println("Card played! What would you like to change the top card color to?");	
+		return cards.get(color).remove(0);
+	}
+	
+	// checks if player's deck contains the card, if so removes the card, otherwise returns null
 	public Card playCard(String color, int number) {
 		
-		Card ret;
-		
-		if (color.equals("wild") && cards.get("wild").size() != 0 || color.equals("wild4") && cards.get("wild4").size() != 0) {
-			numCards --;
-			System.out.println("Card played! What color would you like to change the top card color to?");
-			
-			return cards.get(color).remove(0);
+		// checks if wild/wild4 was played, just has to check if player has that card
+		if (color.equals("wild")) {	
+			return checkWild("wild", color);		
+		}	
+		if (color.equals("wild4")) {			
+			return checkWild("wild4", color);	
 		}
-		else if (color.equals("wild") || color.equals("wild4")) {
-			System.out.println("You don't have that card! Try again.");
-			return null;	
-		}
-		
+	
+		// checks all other cards by cross checking color with number in hand
 		for (int i = 0; i < cards.get(color).size(); i ++) {
 			Card c = cards.get(color).get(i);
 			if (c.number == number) {
@@ -62,6 +76,7 @@ public class Player {
 		return null;
 	}
 	
+	// prints out entire hand of cards in readable format, sorted by color
 	public void printCards() {
 		System.out.println(name + ", you have " + numCards + " cards:");
 		for (String color: cardOrder) {
@@ -69,14 +84,11 @@ public class Player {
 			
 			for (Card c : cards.get(color.toLowerCase())) {
 				output += c.number + " ";
-			}
-			
+			}		
 			System.out.println(output);
 		}
 		
-		System.out.println("Num Wild Cards: " + cards.get("wild").size());
-		System.out.println("Num Wild+4 Cards: " + cards.get("wild4").size());
+		System.out.println("# Wild Cards: " + cards.get("wild").size());
+		System.out.println("# Wild+4 Cards: " + cards.get("wild4").size());
 	}
-
-
 }

@@ -8,14 +8,14 @@ import java.util.Scanner;
 public class PlayGame {
 	
 	private Scanner scan = new Scanner(System.in);
+	
 	int numPlayers;
 	GameLoop gp;
 	LinkedList<Card> deck;
 	
-	Card topCard;
-	String topColor;
+	Card topCard;		// top card in discard pile
+	String topColor;	// top color in discard pile
 	
-	ArrayList<Card> discardDeck;
 	Player currPlayer;
 	
 	public PlayGame() {
@@ -23,8 +23,6 @@ public class PlayGame {
 		numPlayers = getNumPlayers();
 		
 		gp = makePlayerLoop();
-		
-		discardDeck = new ArrayList<Card>();
 		
 		deck = makeDeck();
 		
@@ -78,11 +76,6 @@ public class PlayGame {
 			for (int i = 0; i < 13; i ++) {
 				ret.add(new Card(color.toLowerCase(), i));
 				
-				/** Uno deck includes 2 of every number except 0 per color
-				 * 10 == Skip Card
-				 * 11 = +2 Card
-				 * 12 = Reverse Card
-				 */
 				if (i != 0) {
 					ret.add(new Card(color.toLowerCase(), i));
 				}
@@ -217,8 +210,18 @@ public class PlayGame {
 			if (topCard.number == 14) {
 				tryToDraw(currPlayer.next, 4);
 			}
+		}	
+	}
+	
+	// return True if player wants to draw card, return false if wants to play card
+	private boolean drawCard() {
+		System.out.println("Would you like to draw a card or play a card?(d/p)\n>> ");
+		String answer = scan.next();
+		while (answer.equals("d") || answer.equals("p")) {
+			System.out.println("Invalid response, try again!\n>> ");
+			answer = scan.next();
 		}
-		
+		return answer.equals("d");
 	}
 	private void run() {
 		boolean winner = false;
@@ -233,20 +236,34 @@ public class PlayGame {
 			
 			displayTopCard();
 			
-			topCard = playTurn(currPlayer);
-			
-			handlePlay();
-			
+			// if the player wants to draw a card, draw one/update deck, otherwise let play a turn
+			if (drawCard()) {
+				tryToDraw(currPlayer, 1);
+			} else {
+				topCard = playTurn(currPlayer);
+				handlePlay();
+			}
+
 			if(currPlayer.numCards == 1) {
 				System.out.println(currPlayer.name + " has UNO!");
 			} else if (currPlayer.numCards == 0) {
 				winner = true;
 				System.out.println(currPlayer.name + " WINS!!!!!");
-			}		
+			}
+			
+			
 			currPlayer = currPlayer.next;		
+			System.out.println("Your turn is over! Press any key and pass "
+					+ "the computer to " + currPlayer.name);
+			
+			scan.nextLine();
 			
 			System.out.print("\033[H\033[2J");  
 		    System.out.flush();
 		}	
 	}
 }
+
+//TODO: check that you can actually play that card
+//TODO: handle wildcard playment to update color
+//TODO: Readme- you can only draw OR play a card, can't declare uno yourself

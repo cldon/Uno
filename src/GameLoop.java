@@ -1,11 +1,9 @@
-/** simple linked list of players
- * 
- * 
- *
+/** 
+ * Game Loop is a circular linked list made up of nodes of players
+ * Has functionality to be reversed in the case that a player plays the "Reverse" card
  */
 
 public class GameLoop {
-	
 	
 	private Player head;
 	private Player curr;
@@ -33,7 +31,7 @@ public class GameLoop {
 		}
 	}
 	
-	// swap values of prev and next for each player node
+	// reverses game flow direction
 	public void reverse() {
 		
 		Player currentEl = head;
@@ -47,10 +45,6 @@ public class GameLoop {
 			prev = currentEl;
 			currentEl = next;
 			
-		}
-		
-		
+		}	
 	}
-	
-	
 }
