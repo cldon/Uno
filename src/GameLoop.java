@@ -7,10 +7,12 @@ public class GameLoop {
 	
 	private Player head;
 	private Player curr;
+	int size;
 	
 	public GameLoop(){
 		head = null;
-		curr = null;
+		curr = null; 
+		size = 0;
 	}
 	
 	public Player getFirst() {
@@ -18,7 +20,7 @@ public class GameLoop {
 	}
 	
 	public void add(String name) {	
-		
+		size ++;
 		Player p = new Player(name);
 		
 		if (head != null) {	
@@ -33,18 +35,20 @@ public class GameLoop {
 	
 	// reverses game flow direction
 	public void reverse() {
-		
+		Player prev = null;
 		Player currentEl = head;
-		Player prev = curr;
-		Player next = null;
+		Player next;
 		
-		while(curr.next != head) {
+		for (int i = 0; i < size; i ++) {
 			next = currentEl.next;
-			curr.next = prev;
-			
+			currentEl.next = prev;
 			prev = currentEl;
 			currentEl = next;
+		}
+		
+		head.next = prev;
+		
+		
 			
-		}	
 	}
 }

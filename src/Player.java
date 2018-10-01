@@ -42,23 +42,23 @@ public class Player {
 	
 	//helper function for checking wild cards, same checks done for wild and wild4
 	private Card checkWild(String wild, String color) {
-		if (cards.get("wild").size() == 0) {
+		if (cards.get(wild).size() == 0) {
 			System.out.println("You don't have that card! Try again.");
 			return null;
 		}		
 		numCards --;
-		System.out.println("Card played! What would you like to change the top card color to?");	
 		return cards.get(color).remove(0);
 	}
 	
 	// checks if player's deck contains the card, if so removes the card, otherwise returns null
 	public Card playCard(String color, int number) {
-		
+
 		// checks if wild/wild4 was played, just has to check if player has that card
 		if (color.equals("wild")) {	
 			return checkWild("wild", color);		
 		}	
-		if (color.equals("wild4")) {			
+		if (color.equals("wild4")) {	
+			System.out.println("Inside check wild4");
 			return checkWild("wild4", color);	
 		}
 	
@@ -67,7 +67,7 @@ public class Player {
 			Card c = cards.get(color).get(i);
 			if (c.number == number) {
 				numCards --;
-				System.out.println("Card played! Next player's turn.");
+				System.out.println("Card played!");
 				return cards.get(color).remove(i);	
 			}
 		}
