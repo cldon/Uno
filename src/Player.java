@@ -7,14 +7,14 @@ public class Player {
 	String name;
 	Map<String, ArrayList<Card>> cards;
 	
-	Player next = null;
-	Player prev = null;
+	Player next;
 	
 	int numCards;
 	
 	static String[] cardOrder = {"Red", "Blue", "Yellow", "Green"};
 	
 	public Player(String name) {
+				
 		this.name = name;
 		
 		cards = new HashMap<String, ArrayList<Card>>();
@@ -26,6 +26,7 @@ public class Player {
 		cards.put("wild4", new ArrayList<Card>());
 		
 		numCards = 0;
+		next = null;
 	}
 	
 	public void dealCard(Card c) {

@@ -182,16 +182,21 @@ public class PlayGame {
 		if (topCard.number <= 9) {
 			return;
 		}
-		//TODO: have to check that won't run out of cards
 		// Skip card: add an extra skip to currPlayer
 		else if (topCard.number == 10) {
+			System.out.println("SKIP!");
 			currPlayer = currPlayer.next;
 		} // +2 card: person coming next gains two cards
-		else if (topCard.number == 11) {			
+		else if (topCard.number == 11) {
+			System.out.println(currPlayer.next.name + " just gained two cards!");
 			tryToDraw(currPlayer.next, 2);
-		} else if(topCard.number == 12 || topCard.number == 13) {
+		} else if(topCard.number == 12) {
+			System.out.println("REVERSE!");
+			gp.reverse();
+		}
+		else if(topCard.number == 13 || topCard.number == 14) {
 			
-			System.out.print("You chose wild card! What would you like the color to be?\n>> ");
+			System.out.print("Wild card! What would you like the color to be?\n>> ");
 			String color = scan.next().toLowerCase();
 			
 			while (!Card.ALL_COLORS.contains(color) && !color.equals("wild") && !color.equals("wild4")) {
@@ -201,7 +206,7 @@ public class PlayGame {
 			
 			topColor = color;
 			
-			if (topCard.number == 13) {
+			if (topCard.number == 14) {
 				tryToDraw(currPlayer.next, 4);
 			}
 		}
@@ -209,14 +214,12 @@ public class PlayGame {
 	}
 	private void run() {
 		boolean winner = false;
-		boolean reverse = false;
 		
 		currPlayer = gp.getFirst();
 		
 		Player currPlayer = gp.getFirst();
 		
-		int count = 0;
-		while (count < 3) {			
+		while (!winner) {			
 			
 			currPlayer.printCards();
 			
@@ -226,9 +229,13 @@ public class PlayGame {
 			
 			handlePlay();
 			
-			currPlayer = currPlayer.next;
-			count ++;
-				
+			if(currPlayer.numCards == 1) {
+				System.out.println(currPlayer.name + " has UNO!");
+			} else if (currPlayer.numCards == 0) {
+				winner = true;
+				System.out.println(currPlayer.name + " WINS!!!!!");
+			}		
+			currPlayer = currPlayer.next;			
 		}	
 	}
 }

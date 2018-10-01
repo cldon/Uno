@@ -1,4 +1,4 @@
-/** simple doubly linked list of player
+/** simple linked list of players
  * 
  * 
  *
@@ -26,21 +26,30 @@ public class GameLoop {
 		
 		if (head != null) {	
 			curr.next = p;
-			p.prev = curr;
 			p.next = head;
 			curr = p;
-			
-			head.prev = curr;
 		} else {
 			head = p;
 			curr = p;	
 		}
 	}
 	
+	// swap values of prev and next for each player node
 	public void reverse() {
-		Player prev = null;
-		Player curr = head;
-		Player next = null; 
+		
+		Player currentEl = head;
+		Player prev = curr;
+		Player next = null;
+		
+		while(curr.next != head) {
+			next = currentEl.next;
+			curr.next = prev;
+			
+			prev = currentEl;
+			currentEl = next;
+			
+		}
+		
 		
 	}
 	
