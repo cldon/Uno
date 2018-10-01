@@ -9,7 +9,6 @@ public class GameLoop {
 	
 	private Player head;
 	private Player curr;
-	private Player tail;
 	
 	public GameLoop(){
 		head = null;

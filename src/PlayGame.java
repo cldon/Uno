@@ -43,6 +43,7 @@ public class PlayGame {
 		while (numPlayers < 0) {
 			try {
 				numPlayers = scan.nextInt();
+				scan.nextLine();
 				if (numPlayers < 2 || numPlayers > 10) {
 					numPlayers = -1;
 					System.out.print("Invalid number of players, try again!\n>> ");
@@ -133,26 +134,31 @@ public class PlayGame {
 		while (!success) {
 			System.out.println("What card would you like to play?");
 			System.out.print("Color (blue, red, green, yellow, wild, wild4:\n>> ");
-			color = scan.next().toLowerCase();
 			
+			color = scan.next().toLowerCase();		
 			
 			while (!Card.ALL_COLORS.contains(color)) {
 				System.out.print("Invalid color, try again!\n>> ");
 				color = scan.next().toLowerCase();
 			}
+
 			if (!color.equals("wild") || !color.equals("wild4")) {
+				
 				System.out.print("Number (0-9, 10 = Skip, 11 = +2, 12 = Reverse):\n>> ");
+				number = scan.nextInt();
+				scan.nextLine();
 				
 				while (number < 0 || number > 12) {
-					try {
-						number = scan.nextInt();
+					try {				
 						if (number < 0 || number > 12) {
-							number = -1;
 							System.out.print("Invalid number, try again!\n>> ");
+							number = scan.nextInt();
+							scan.nextLine();
 						}
 					}
 					catch (InputMismatchException e){
-						scan.next();
+						scan.nextInt();
+						scan.nextLine();
 						System.out.print("Invalid number, try again!\n>> ");
 					}
 				}			
@@ -185,7 +191,9 @@ public class PlayGame {
 		// Skip card: add an extra skip to currPlayer
 		else if (topCard.number == 10) {
 			System.out.println("SKIP!");
+			System.out.println("Old player: " + currPlayer.name);
 			currPlayer = currPlayer.next;
+			System.out.println("New player: " + currPlayer.name);
 		} // +2 card: person coming next gains two cards
 		else if (topCard.number == 11) {
 			System.out.println(currPlayer.next.name + " just gained two cards!");
@@ -235,7 +243,10 @@ public class PlayGame {
 				winner = true;
 				System.out.println(currPlayer.name + " WINS!!!!!");
 			}		
-			currPlayer = currPlayer.next;			
+			currPlayer = currPlayer.next;		
+			
+			System.out.print("\033[H\033[2J");  
+		    System.out.flush();
 		}	
 	}
 }

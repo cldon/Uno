@@ -63,7 +63,7 @@ public class Player {
 	}
 	
 	public void printCards() {
-		System.out.println(name + ", here are your cards:");
+		System.out.println(name + ", you have " + numCards + " cards:");
 		for (String color: cardOrder) {
 			String output = color + ": ";
 			
